@@ -141,6 +141,15 @@ export async function browserChecks({ root, site }) {
         }));
         if (after.theme !== 'dark' || after.stored !== 'dark' || after.pressed !== 'true') fail(`${home} [theme]`, 'toggle did not switch to dark, store it, and set aria-pressed="true"');
       }
+      // Desktop navigation: visible without opening anything.
+      {
+        const desktop = await browser.newContext({ viewport: VIEWPORTS.desktop });
+        const wide = await desktop.newPage();
+        await wide.goto(base + home);
+        const menu = wide.locator('nav[popover]').first();
+        if ((await menu.count()) && !(await menu.isVisible())) fail(`${home} [desktop nav]`, 'main navigation is not visible at desktop width');
+        await desktop.close();
+      }
       // Mobile navigation: closed, opens with the button, closes with Escape.
       const opener = page.locator('button[popovertarget]').first();
       if (await opener.count()) {

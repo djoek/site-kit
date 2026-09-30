@@ -216,10 +216,13 @@ export async function outputChecks({ root, site }) {
     if (!description) fail(scope, 'missing meta description');
     if (description.length > 170) fail(scope, `description is ${description.length} characters (maximum 170)`);
     if (!page.noindex) {
-      if (titles.has(title)) fail(scope, `same title as ${titles.get(title)}`);
-      if (descriptions.has(description)) fail(scope, `same description as ${descriptions.get(description)}`);
-      titles.set(title, scope);
-      descriptions.set(description, scope);
+      // Unique within a language; the same brand-name title in every language is fine.
+      const titleKey = `${page.lang}\n${title}`;
+      const descriptionKey = `${page.lang}\n${description}`;
+      if (titles.has(titleKey)) fail(scope, `same title as ${titles.get(titleKey)}`);
+      if (descriptions.has(descriptionKey)) fail(scope, `same description as ${descriptions.get(descriptionKey)}`);
+      titles.set(titleKey, scope);
+      descriptions.set(descriptionKey, scope);
       const canonicals = document.querySelectorAll('link[rel="canonical"]');
       if (canonicals.length !== 1) fail(scope, `expected one canonical link, found ${canonicals.length}`);
       else if (canonicals[0].getAttribute('href') !== site.url + page.path) fail(scope, `canonical must be ${site.url + page.path}`);

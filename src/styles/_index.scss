@@ -213,7 +213,9 @@ nav ul {
 button[popovertarget] {
   display: none;
 }
+// A [popover] element is hidden by the browser until opened; on wide screens show it inline.
 nav[popover] {
+  display: block;
   position: static;
   inset: auto;
   width: auto;

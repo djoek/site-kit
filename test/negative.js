@@ -60,6 +60,17 @@ const results = [
     appendFileSync(path.join(work, 'src/styles/site.scss'), '\nmain p { color: color-mix(in oklch, var(--color-bg) 80%, var(--color-text)); }\n');
   }, ['axe color-contrast']),
 
+  runCase('browser: main navigation hidden on desktop', [], (work) => {
+    appendFileSync(path.join(work, 'src/styles/site.scss'), '\nnav[popover] { display: none; }\n');
+  }, ['main navigation is not visible at desktop width']),
+
+  runCase('output: same description twice within one language', ['--no-browser'], (work) => {
+    const file = path.join(work, 'src/content/i18n/nl.json');
+    const copy = JSON.parse(readFileSync(file, 'utf8'));
+    copy.privacy.description = copy.home.description;
+    writeFileSync(file, JSON.stringify(copy));
+  }, ['privacy/index.html: same description as index.html']),
+
   runCase('output: redirect to a page that does not exist', ['--no-browser'], (work) => {
     edit(work, 'site.config.ts', "redirects: { '/Privacy.html': '/privacy/' }", "redirects: { '/Privacy.html': '/privacybeleid/' }");
   }, ['/Privacy.html points to /privacybeleid/, which is not a built page']),
