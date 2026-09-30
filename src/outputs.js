@@ -130,7 +130,7 @@ function llms(site, copy, hours, pages) {
   if (site.phone) lines.push(`- ${kit.address.phone}: ${site.phone}`);
   if (site.address) {
     const a = site.address;
-    lines.push(`- ${a.street}, ${a.postalCode} ${a.locality}, ${a.country}`);
+    lines.push(`- ${a.street}, ${[a.postalCode, a.locality].filter(Boolean).join(' ')}, ${a.country}`);
   }
   if (hours) {
     const names = weekdayNames(lang);

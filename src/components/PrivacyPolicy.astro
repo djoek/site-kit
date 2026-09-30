@@ -12,7 +12,7 @@ const lang = langOf(Astro.currentLocale);
 const t = copyFor(lang).kit.privacy;
 const Heading = `h${level}`;
 const values = {
-  legalName: site.legalName,
+  legalName: site.legalName ?? site.name,
   email: site.email,
   provider: site.hosting?.provider ?? '',
   date: new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${site.privacy.lastUpdated}T00:00:00Z`)),

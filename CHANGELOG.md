@@ -2,6 +2,10 @@
 
 Newest first. Sites pin a version with `github:djoek/site-kit#vX.Y.Z`; read every entry between your pinned version and the new one before bumping.
 
+## 0.1.1 (2026-09-30)
+
+- `legalName` and `address.postalCode` are optional. Without a legal name the site shows `name` (address block, privacy policy); JSON-LD leaves the missing fields out.
+
 ## 0.1.0 (2026-09-30)
 
 - First version: `<Document>` shell, head/SEO/JSON-LD, theme toggle, Popover navigation, language switcher, optional contact form, opening hours from `hours.toml`, address block, privacy policy (nl, en).

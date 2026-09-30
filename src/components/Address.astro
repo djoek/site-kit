@@ -12,8 +12,8 @@ const a = site.address;
 ---
 <address>
   <p>
-    {site.legalName}
-    {a && <Fragment><br />{a.street}<br />{`${a.postalCode} ${a.locality}`}</Fragment>}
+    {site.legalName ?? site.name}
+    {a && <Fragment><br />{a.street}<br />{[a.postalCode, a.locality].filter(Boolean).join(' ')}</Fragment>}
   </p>
   <p>
     {site.phone && <Fragment>{t.phone}: <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a><br /></Fragment>}

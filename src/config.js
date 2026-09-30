@@ -10,7 +10,8 @@ const schema = z
       .url()
       .refine((value) => value.startsWith('https://') && !value.endsWith('/'), 'must be https:// without trailing slash'),
     name: z.string().min(1),
-    legalName: z.string().min(1),
+    /** Registered legal name. Optional: without it the site shows `name`. */
+    legalName: z.string().min(1).optional(),
     /** schema.org type, e.g. Organization, LocalBusiness, Bakery, CafeOrCoffeeShop, ChildCare. */
     schemaType: z.string().regex(/^[A-Z][A-Za-z]+$/).default('Organization'),
     email: z.string().email(),
@@ -19,7 +20,7 @@ const schema = z
     address: z
       .object({
         street: z.string().min(1),
-        postalCode: z.string().min(1),
+        postalCode: z.string().min(1).optional(),
         locality: z.string().min(1),
         country: z.string().length(2),
       })

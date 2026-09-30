@@ -31,7 +31,7 @@ const organization = {
   '@type': site.schemaType,
   '@id': `${site.url}/#organization`,
   name: site.name,
-  legalName: site.legalName,
+  ...(site.legalName ? { legalName: site.legalName } : {}),
   url: `${site.url}/`,
   email: site.email,
   ...(site.phone ? { telephone: site.phone } : {}),
@@ -41,7 +41,7 @@ const organization = {
         address: {
           '@type': 'PostalAddress',
           streetAddress: site.address.street,
-          postalCode: site.address.postalCode,
+          ...(site.address.postalCode ? { postalCode: site.address.postalCode } : {}),
           addressLocality: site.address.locality,
           addressCountry: site.address.country,
         },
