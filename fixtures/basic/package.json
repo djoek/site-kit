@@ -9,7 +9,7 @@
     "deploy": "site-kit deploy"
   },
   "dependencies": {
-    "@djoek/site-kit": "file:../..",
+    "@djoek/site-kit": "link:@djoek/site-kit",
     "astro": "7.3.5",
     "sass": "^1.93.0"
   }

@@ -16,7 +16,12 @@ Shared Astro baseline for small static sites: the parts every site has, so each 
 | Contact form (optional) | `<ContactForm>`, enable with `forms.contact` |
 | Privacy policy, sections follow the config | `<PrivacyPolicy>` |
 | `sitemap.xml`, `robots.txt`, `llms.txt`, `.htaccess` with CSP | generated after every build |
+| Price packages | `<PriceList packages={...}>` |
+| Photo gallery, responsive images | `<Gallery images={...}>` |
+| 301 redirects from old URLs | `redirects` in site.config |
+| Favicons and web manifest | `site-kit favicon` |
 | Checks | `site-kit check` |
+| Deploy | `site-kit deploy` |
 
 ## Use in a site
 
@@ -82,9 +87,36 @@ Options: `--no-browser`, `--scope <copy|image|page|hours|facts|deps>` (fails whe
 
 The browser checks need Chromium: `bunx playwright install chromium`, or point `SITE_KIT_CHROMIUM` at an existing binary.
 
+## Deploy
+
+`site-kit deploy` runs the full check, then mirrors `dist/` to the server with lftp over SFTP. Files on the server that are not in `dist/` are deleted.
+
+Safety, in this order:
+
+1. **Full check** must pass (always including the browser checks).
+2. **Git gate**: clean working tree, on `main`, identical to `origin/main`. A merged PR is the only way to get something deployed.
+3. **Reviewed path**: `SFTP_PATH` in the env file must equal `deploy.remotePath` in `site.config.ts`.
+4. **Target marker**: every build contains `.site-kit-target` with the domain. The server copy must hold the same domain; a directory with another site's marker is refused. The first deploy to a directory without marker needs `--first-deploy` (look at `--dry-run` first).
+5. After the mirror: IndexNow (if `indexNowKey` is set) and a **live smoke test** of home, robots, sitemap, llms, privacy, 404 and every redirect.
+
+Connection settings live outside the repository, one file per site, `chmod 600`:
+
+```sh
+# ~/.config/site-ops/deploy/<domain>.env
+SFTP_HOST=ssh.example-host.net
+SFTP_PORT=22
+SFTP_USER=account
+SFTP_PATH=/www/example.be          # must equal deploy.remotePath
+SFTP_KEYFILE=~/.ssh/example-deploy
+```
+
+The server's host key must already be in `~/.ssh/known_hosts` (connections run with `BatchMode=yes` and never ask).
+
+`--dry-run` shows what would change and skips the git gate. Needs `lftp` installed.
+
 ## Develop site-kit
 
 ```sh
 bun install
-bun run test        # fixture must pass, broken copies of it must fail
+bun run test        # fixture must pass, broken copies of it must fail, deploy end-to-end (needs sshd + lftp, skipped otherwise)
 ```

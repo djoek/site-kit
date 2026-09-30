@@ -28,12 +28,14 @@
     "@axe-core/playwright": "^4.10.2",
     "linkedom": "^0.18.12",
     "playwright": "^1.56.0",
-    "smol-toml": "^1.4.2"
+    "smol-toml": "^1.4.2",
+    "sharp": "^0.35.4"
   },
   "scripts": {
-    "test": "bun run test:fixture && bun run test:negative",
-    "test:fixture": "cd fixtures/basic && bun install --force && bun run check",
-    "test:negative": "bun test/negative.js"
+    "test": "bun run test:fixture && bun run test:negative && bun run test:deploy",
+    "test:fixture": "bun link && cd fixtures/basic && bun install && bun run check",
+    "test:negative": "bun test/negative.js",
+    "test:deploy": "bun test/deploy.js"
   },
   "devDependencies": {
     "astro": "7.3.5",

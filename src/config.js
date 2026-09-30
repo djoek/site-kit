@@ -41,6 +41,19 @@ const schema = z
     indexNowKey: z.string().regex(/^[A-Za-z0-9-]{8,128}$/).optional(),
     hosting: z.object({ provider: z.string().min(1) }).optional(),
     privacy: z.object({ lastUpdated: z.string().date() }),
+    /** Permanent redirects from old URLs: { '/Prijzen.html': '/prijzen/' }. Exact match, case-sensitive. */
+    redirects: z
+      .record(z.string().regex(/^\/[^\s]*$/, 'must start with /'), z.string().regex(/^\/[^\s]*$/, 'must start with /'))
+      .default({}),
+    /** Reviewed, non-secret deploy target. Host, user and key live in the env file (see README). */
+    deploy: z
+      .object({
+        remotePath: z
+          .string()
+          .regex(/^\/[A-Za-z0-9._/-]+$/, 'absolute path with letters, digits, . _ - / only')
+          .refine((value) => !value.includes('..') && !value.endsWith('/') && !value.includes('//'), 'no "..", "//" or trailing slash'),
+      })
+      .optional(),
     /** Extra or overriding HTTP headers written to .htaccess. */
     headers: z.record(z.string(), z.string()).default({}),
   })

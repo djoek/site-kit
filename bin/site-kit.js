@@ -1,7 +1,8 @@
 #!/usr/bin/env bun
 // site-kit command line. Run from a site's root directory.
 //   site-kit check [--no-browser] [--scope <type>] [--base <ref>]
-//   site-kit deploy [--dry-run]
+//   site-kit deploy [--dry-run] [--first-deploy]
+//   site-kit favicon
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -16,6 +17,7 @@ const { positionals, values } = parseArgs({
     scope: { type: 'string' },
     base: { type: 'string', default: 'origin/main' },
     'dry-run': { type: 'boolean', default: false },
+    'first-deploy': { type: 'boolean', default: false },
   },
 });
 const [command] = positionals;
@@ -61,7 +63,7 @@ async function check() {
   ok = report('output checks', await outputChecks({ root, site })) && ok;
   if (!values['no-browser']) {
     const { browserChecks } = await import('../src/check/browser.js');
-    ok = report('browser checks', await browserChecks({ root })) && ok;
+    ok = report('browser checks', await browserChecks({ root, site })) && ok;
   }
   if (!ok) process.exit(1);
   console.log('All checks passed.');
@@ -71,11 +73,24 @@ switch (command) {
   case 'check':
     await check();
     break;
-  case 'deploy':
-    console.error('site-kit deploy is not implemented yet (Phase A3).');
-    process.exit(1);
+  case 'deploy': {
+    values['no-browser'] = false; // a deploy always runs the full check
+    await check(); // exits on failure
+    const { deploy } = await import('../src/deploy.js');
+    try {
+      await deploy({ root, site: await loadSite(), dryRun: values['dry-run'], firstDeploy: values['first-deploy'] });
+    } catch (error) {
+      console.error(`✗ deploy: ${error.message}`);
+      process.exit(1);
+    }
     break;
+  }
+  case 'favicon': {
+    const { favicon } = await import('../src/favicon.js');
+    await favicon({ root, site: await loadSite() });
+    break;
+  }
   default:
-    console.error('usage: site-kit check [--no-browser] [--scope <type>] | site-kit deploy [--dry-run]');
+    console.error('usage: site-kit check [--no-browser] [--scope <type>] [--base <ref>] | site-kit deploy [--dry-run] [--first-deploy] | site-kit favicon');
     process.exit(2);
 }

@@ -1,0 +1,42 @@
+---
+// Price packages: name, one or more prices (optionally labelled, e.g. "Appartement" / "Huis"),
+// and what is included. Amounts are numbers; formatting follows the page language.
+import { copyFor, langOf } from '../runtime.js';
+
+interface Props {
+  packages: { name: string; prices: { label?: string; amount: number }[]; includes: string[] }[];
+  /** Shown under the list, e.g. "Alle prijzen zijn exclusief btw." */
+  note?: string;
+  /** Heading level of the package names. */
+  level?: 2 | 3 | 4;
+  currency?: string;
+}
+const { packages, note, level = 3, currency = 'EUR' } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const t = copyFor(lang).kit;
+const Heading = `h${level}`;
+const format = (amount: number) =>
+  new Intl.NumberFormat(lang, { style: 'currency', currency, maximumFractionDigits: Number.isInteger(amount) ? 0 : 2 }).format(amount);
+const slug = (text: string) => text.toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+---
+<ul>
+  {packages.map((item) => (
+    <li>
+      <article aria-labelledby={`price-${slug(item.name)}`}>
+        <Heading id={`price-${slug(item.name)}`}>{item.name}</Heading>
+        <dl>
+          {item.prices.map((price) => (
+            <Fragment>
+              <dt>{price.label ?? t.price}</dt>
+              <dd><data value={String(price.amount)}>{format(price.amount)}</data></dd>
+            </Fragment>
+          ))}
+        </dl>
+        <ul>
+          {item.includes.map((line) => <li>{line}</li>)}
+        </ul>
+      </article>
+    </li>
+  ))}
+</ul>
+{note && <p><small>{note}</small></p>}

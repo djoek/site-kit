@@ -7,7 +7,7 @@ import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
-import { htmlFiles, parseHtaccessHeaders, urlPath } from '../outputs.js';
+import { htmlFiles, parseHtaccessHeaders, parseHtaccessRedirects, urlPath } from '../outputs.js';
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -29,11 +29,21 @@ const TYPES = {
 const VIEWPORTS = { mobile: { width: 390, height: 844 }, desktop: { width: 1280, height: 800 } };
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
-function serve(dist) {
+export function serve(dist) {
   const htaccess = path.join(dist, '.htaccess');
-  const headers = existsSync(htaccess) ? parseHtaccessHeaders(readFileSync(htaccess, 'utf8')) : {};
+  // Read per request, like Apache: the served directory can change while the server runs.
+  const rules = () => {
+    const text = existsSync(htaccess) ? readFileSync(htaccess, 'utf8') : '';
+    return { headers: parseHtaccessHeaders(text), redirects: parseHtaccessRedirects(text) };
+  };
   const server = createServer(async (request, response) => {
+    const { headers, redirects } = rules();
     let pathname = decodeURIComponent(new URL(request.url ?? '/', 'http://localhost').pathname);
+    if (redirects[pathname]) {
+      response.writeHead(301, { ...headers, Location: redirects[pathname] });
+      response.end();
+      return;
+    }
     if (pathname.endsWith('/')) pathname += 'index.html';
     const file = path.join(dist, path.normalize(pathname));
     let status = 200;
@@ -48,7 +58,7 @@ function serve(dist) {
   return new Promise((resolve) => server.listen(0, '127.0.0.1', () => resolve(server)));
 }
 
-export async function browserChecks({ root }) {
+export async function browserChecks({ root, site }) {
   const failures = [];
   const fail = (scope, message) => failures.push(`${scope}: ${message}`);
   const dist = path.join(root, 'dist');
@@ -94,6 +104,16 @@ export async function browserChecks({ root }) {
           await context.close();
         }
       }
+    }
+
+    // Redirects from old URLs land on a working page.
+    for (const [from, to] of Object.entries(site?.redirects ?? {})) {
+      const context = await browser.newContext();
+      const page = await context.newPage();
+      const response = await page.goto(base + from);
+      const landed = new URL(page.url()).pathname;
+      if (landed !== to || response?.status() !== 200) fail(`redirect ${from}`, `expected to land on ${to} with HTTP 200, got ${landed} (HTTP ${response?.status()})`);
+      await context.close();
     }
 
     // Behaviour, tested once on the home page.

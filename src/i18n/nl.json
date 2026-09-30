@@ -45,5 +45,6 @@
     "rightsHeading": "Je rechten",
     "rights": "Je kunt je gegevens inzien, laten verbeteren of laten wissen, en je kunt bezwaar maken tegen de verwerking. Stuur daarvoor een e-mail naar {email}. Je kunt ook een klacht indienen bij de Gegevensbeschermingsautoriteit (www.gegevensbeschermingsautoriteit.be).",
     "updated": "Laatst bijgewerkt: {date}"
-  }
+  },
+  "price": "Prijs"
 }

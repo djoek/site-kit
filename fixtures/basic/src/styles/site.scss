@@ -40,3 +40,30 @@ body > footer {
   padding-block: 2rem;
   border-top: 0.1rem solid var(--color-border);
 }
+
+#prices > ul,
+#gallery > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+#prices article {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.5rem;
+  background: var(--color-surface);
+
+  dl {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.25rem 1rem;
+  }
+  dd {
+    font-weight: 700;
+  }
+}

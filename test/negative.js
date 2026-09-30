@@ -60,6 +60,10 @@ const results = [
     appendFileSync(path.join(work, 'src/styles/site.scss'), '\nmain p { color: color-mix(in oklch, var(--color-bg) 80%, var(--color-text)); }\n');
   }, ['axe color-contrast']),
 
+  runCase('output: redirect to a page that does not exist', ['--no-browser'], (work) => {
+    edit(work, 'site.config.ts', "redirects: { '/Privacy.html': '/privacy/' }", "redirects: { '/Privacy.html': '/privacybeleid/' }");
+  }, ['/Privacy.html points to /privacybeleid/, which is not a built page']),
+
   runCase('site data: invalid opening hours', ['--no-browser'], (work) => {
     edit(work, 'src/data/hours.toml', 'fri = [["07:00", "18:00"]]', 'fri = [["18:00", "07:00"]]');
   }, ['[week].fri: 18:00 is not before 07:00']),

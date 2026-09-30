@@ -76,7 +76,10 @@ const jsonLd = {
     <meta property="og:url" content={canonical} />
     {image && <meta property="og:image" content={new URL(image, site.url).href} />}
     {image && <meta name="twitter:card" content="summary_large_image" />}
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
     <script is:inline set:html={themeScript} />

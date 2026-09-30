@@ -6,8 +6,10 @@ import { site, copyFor, langOf } from '../runtime.js';
 interface Props {
   /** Prefix for element ids; change it only if a page has two forms. */
   id?: string;
+  /** Optional multiple-choice question, shown before the message. Texts come from the site's i18n. */
+  choice?: { name: string; legend: string; options: string[]; required?: boolean };
 }
-const { id = 'contact' } = Astro.props;
+const { id = 'contact', choice } = Astro.props;
 if (!site.forms.contact) throw new Error('site-kit: <ContactForm> needs forms.contact.endpoint in site.config');
 const t = copyFor(langOf(Astro.currentLocale)).kit.form;
 ---
@@ -25,6 +27,17 @@ const t = copyFor(langOf(Astro.currentLocale)).kit.form;
     <input id={`${id}-reply`} name="reply" type="text" aria-describedby={`${id}-reply-hint`} />
     <small id={`${id}-reply-hint`}>{t.replyHint}</small>
   </p>
+  {choice && (
+    <fieldset>
+      <legend>{choice.legend}</legend>
+      {choice.options.map((option, index) => (
+        <p>
+          <input id={`${id}-${choice.name}-${index}`} name={choice.name} type="radio" value={option} required={choice.required} />
+          <label for={`${id}-${choice.name}-${index}`}>{option}</label>
+        </p>
+      ))}
+    </fieldset>
+  )}
   <p>
     <label for={`${id}-message`}>{t.message}</label>
     <textarea id={`${id}-message`} name="message" rows="6" required></textarea>

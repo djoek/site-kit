@@ -291,6 +291,12 @@ export async function outputChecks({ root, site }) {
     }
   }
 
+  // Redirects: target must be a built page, source must not shadow one.
+  for (const [from, to] of Object.entries(site.redirects)) {
+    if (!byPath.has(to)) fail('redirects', `${from} points to ${to}, which is not a built page`);
+    if (byPath.has(from) || existsSync(path.join(dist, from))) fail('redirects', `${from} is also a real file; the redirect would hide it`);
+  }
+
   // Generated files.
   const sitemapPath = path.join(dist, 'sitemap.xml');
   if (!existsSync(sitemapPath)) fail('sitemap.xml', 'missing');

@@ -45,5 +45,6 @@
     "rightsHeading": "Your rights",
     "rights": "You can access, correct or delete your data, and you can object to the processing. Send an email to {email} for this. You can also file a complaint with the Belgian Data Protection Authority (www.dataprotectionauthority.be).",
     "updated": "Last updated: {date}"
-  }
+  },
+  "price": "Price"
 }

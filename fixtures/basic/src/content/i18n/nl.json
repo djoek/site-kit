@@ -1,6 +1,13 @@
 {
-  "site": { "description": "Ambachtelijke bakkerij in Boechout met brood, taart en koffiekoeken." },
-  "nav": { "home": "Home", "hours": "Openingsuren", "contact": "Contact", "privacy": "Privacy" },
+  "site": {
+    "description": "Ambachtelijke bakkerij in Boechout met brood, taart en koffiekoeken."
+  },
+  "nav": {
+    "home": "Home",
+    "hours": "Openingsuren",
+    "contact": "Contact",
+    "privacy": "Privacy"
+  },
   "home": {
     "title": "Bakkerij Voorbeeld",
     "description": "Vers brood en taart, elke dag gebakken in Boechout.",
@@ -8,9 +15,63 @@
     "heading": "Vers gebakken in Boechout",
     "intro": "Elke ochtend bakken we brood, taart en koffiekoeken met de hand.",
     "hoursHeading": "Wanneer zijn we open?",
-    "contactHeading": "Stuur ons een bericht"
+    "contactHeading": "Stuur ons een bericht",
+    "pricesHeading": "Prijzen",
+    "pricesNote": "Alle prijzen zijn inclusief btw.",
+    "packages": [
+      {
+        "name": "Brood",
+        "prices": [
+          {
+            "label": "Klein",
+            "amount": 2.4
+          },
+          {
+            "label": "Groot",
+            "amount": 3.6
+          }
+        ],
+        "includes": [
+          "Dagvers",
+          "Met de hand gebakken"
+        ]
+      },
+      {
+        "name": "Taart",
+        "prices": [
+          {
+            "amount": 18
+          }
+        ],
+        "includes": [
+          "Voor 6 personen"
+        ]
+      }
+    ],
+    "galleryHeading": "In de bakkerij",
+    "gallery": [
+      "De oven in de ochtend",
+      "De toonbank"
+    ],
+    "choice": {
+      "legend": "Waarover gaat je vraag?",
+      "options": [
+        "Bestelling",
+        "Taart op maat",
+        "Iets anders"
+      ]
+    }
   },
-  "privacy": { "description": "Hoe Bakkerij Voorbeeld omgaat met persoonsgegevens." },
-  "notFound": { "title": "Pagina niet gevonden", "description": "Deze pagina bestaat niet.", "body": "Deze pagina bestaat niet (meer).", "back": "Terug naar de startpagina" },
-  "footer": { "privacy": "Privacyverklaring" }
+  "privacy": {
+    "description": "Hoe Bakkerij Voorbeeld omgaat met persoonsgegevens."
+  },
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "description": "Deze pagina bestaat niet.",
+    "body": "Deze pagina bestaat niet (meer).",
+    "back": "Terug naar de startpagina"
+  },
+  "footer": {
+    "privacy": "Privacyverklaring"
+  }
 }

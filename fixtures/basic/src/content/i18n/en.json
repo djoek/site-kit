@@ -1,6 +1,13 @@
 {
-  "site": { "description": "Artisan bakery in Boechout with bread, cakes and pastries." },
-  "nav": { "home": "Home", "hours": "Opening hours", "contact": "Contact", "privacy": "Privacy" },
+  "site": {
+    "description": "Artisan bakery in Boechout with bread, cakes and pastries."
+  },
+  "nav": {
+    "home": "Home",
+    "hours": "Opening hours",
+    "contact": "Contact",
+    "privacy": "Privacy"
+  },
   "home": {
     "title": "Voorbeeld Bakery",
     "description": "Fresh bread and cakes, baked every day in Boechout.",
@@ -8,9 +15,63 @@
     "heading": "Freshly baked in Boechout",
     "intro": "Every morning we bake bread, cakes and pastries by hand.",
     "hoursHeading": "When are we open?",
-    "contactHeading": "Send us a message"
+    "contactHeading": "Send us a message",
+    "pricesHeading": "Prices",
+    "pricesNote": "All prices include VAT.",
+    "packages": [
+      {
+        "name": "Bread",
+        "prices": [
+          {
+            "label": "Small",
+            "amount": 2.4
+          },
+          {
+            "label": "Large",
+            "amount": 3.6
+          }
+        ],
+        "includes": [
+          "Baked daily",
+          "Made by hand"
+        ]
+      },
+      {
+        "name": "Cake",
+        "prices": [
+          {
+            "amount": 18
+          }
+        ],
+        "includes": [
+          "Serves 6"
+        ]
+      }
+    ],
+    "galleryHeading": "In the bakery",
+    "gallery": [
+      "The oven in the morning",
+      "The counter"
+    ],
+    "choice": {
+      "legend": "What is your question about?",
+      "options": [
+        "An order",
+        "A custom cake",
+        "Something else"
+      ]
+    }
   },
-  "privacy": { "description": "How Voorbeeld Bakery handles personal data." },
-  "notFound": { "title": "Page not found", "description": "This page does not exist.", "body": "This page does not exist (anymore).", "back": "Back to the home page" },
-  "footer": { "privacy": "Privacy policy" }
+  "privacy": {
+    "description": "How Voorbeeld Bakery handles personal data."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "This page does not exist.",
+    "body": "This page does not exist (anymore).",
+    "back": "Back to the home page"
+  },
+  "footer": {
+    "privacy": "Privacy policy"
+  }
 }

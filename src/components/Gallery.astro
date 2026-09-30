@@ -1,0 +1,25 @@
+---
+// Photo gallery with responsive images. Pass images imported from src/assets
+// (e.g. with import.meta.glob) and an alt text for each; captions are optional.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  images: { src: ImageMetadata; alt: string; caption?: string }[];
+  /** Rendered widths in pixels. */
+  widths?: number[];
+  /** CSS sizes attribute; match it to the site's grid. */
+  sizes?: string;
+}
+const { images, widths = [360, 720, 1080], sizes = '(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw' } = Astro.props;
+---
+<ul>
+  {images.map((image) => (
+    <li>
+      <figure>
+        <Picture src={image.src} alt={image.alt} widths={widths} sizes={sizes} formats={['avif', 'webp']} />
+        {image.caption && <figcaption>{image.caption}</figcaption>}
+      </figure>
+    </li>
+  ))}
+</ul>

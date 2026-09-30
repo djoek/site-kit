@@ -2,6 +2,9 @@
 import Page from '../layouts/Page.astro';
 import OpeningHours from '@djoek/site-kit/components/OpeningHours.astro';
 import ContactForm from '@djoek/site-kit/components/ContactForm.astro';
+import PriceList from '@djoek/site-kit/components/PriceList.astro';
+import Gallery from '@djoek/site-kit/components/Gallery.astro';
+const photos = Object.values(import.meta.glob<{ default: ImageMetadata }>('../assets/gallery/*.jpg', { eager: true })).map((m) => m.default);
 import { copyFor, langOf } from '@djoek/site-kit/runtime';
 const copy = copyFor(langOf(Astro.currentLocale)).home;
 ---
@@ -17,8 +20,16 @@ const copy = copyFor(langOf(Astro.currentLocale)).home;
     <h2 id="hours-heading">{copy.hoursHeading}</h2>
     <OpeningHours />
   </section>
+  <section id="prices" aria-labelledby="prices-heading">
+    <h2 id="prices-heading">{copy.pricesHeading}</h2>
+    <PriceList packages={copy.packages} note={copy.pricesNote} />
+  </section>
+  <section id="gallery" aria-labelledby="gallery-heading">
+    <h2 id="gallery-heading">{copy.galleryHeading}</h2>
+    <Gallery images={photos.map((src, i) => ({ src, alt: copy.gallery[i] }))} />
+  </section>
   <section id="contact" aria-labelledby="contact-heading">
     <h2 id="contact-heading">{copy.contactHeading}</h2>
-    <ContactForm />
+    <ContactForm choice={{ name: 'onderwerp', ...copy.choice }} />
   </section>
 </Page>

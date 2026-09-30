@@ -15,4 +15,6 @@ export default defineSite({
   hours: 'src/data/hours.toml',
   hosting: { provider: 'Voorbeeld Hosting' },
   privacy: { lastUpdated: '2026-09-30' },
+  redirects: { '/Privacy.html': '/privacy/' },
+  deploy: { remotePath: '/srv/www/fixture.example.be' },
 });

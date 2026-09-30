@@ -63,6 +63,9 @@ svg {
   display: block;
   max-width: 100%;
 }
+img {
+  height: auto;
+}
 input,
 button,
 textarea,
@@ -285,8 +288,36 @@ select {
   background: var(--color-surface);
   color: inherit;
 }
+input[type='radio'],
+input[type='checkbox'] {
+  width: auto;
+  accent-color: var(--color-accent);
+}
+fieldset {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem 1rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.25rem;
+
+  p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
 small {
   color: var(--color-muted);
+}
+
+// Figures: images fill their column, captions muted.
+figure img {
+  width: 100%;
+}
+figcaption {
+  padding-top: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.875em;
 }
 
 table {
