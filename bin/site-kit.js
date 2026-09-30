@@ -3,6 +3,7 @@
 //   site-kit check [--no-browser] [--scope <type>] [--base <ref>]
 //   site-kit deploy [--dry-run] [--first-deploy]
 //   site-kit favicon [--source <svg or png>]
+//   site-kit maint start <issue> | maint finish | maint deploy
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -39,12 +40,13 @@ function report(title, failures) {
   return false;
 }
 
-async function check() {
+/** Run the checks; returns true when everything passed. */
+async function runChecks({ scope = values.scope, base = values.base, browser = !values['no-browser'] } = {}) {
   const site = await loadSite();
   let ok = true;
-  if (values.scope) {
+  if (scope) {
     const { scopeCheck } = await import('../src/check/scope.js');
-    ok = report(`scope (${values.scope})`, scopeCheck({ root, type: values.scope, base: values.base })) && ok;
+    ok = report(`scope (${scope})`, scopeCheck({ root, type: scope, base })) && ok;
   }
   const { sourceChecks, outputChecks } = await import('../src/check/static.js');
   let data;
@@ -52,36 +54,59 @@ async function check() {
     data = loadSiteData(root, site);
   } catch (error) {
     report('site data', [error.message]);
-    process.exit(1);
+    return false;
   }
   const sourceOk = report('source checks', sourceChecks({ root, data }));
   ok = sourceOk && ok;
   const build = spawnSync(process.execPath, ['run', 'build'], { cwd: root, stdio: 'inherit', env: { ...process.env, ASTRO_TELEMETRY_DISABLED: '1' } });
   if (build.status !== 0) {
     report('build', [sourceOk ? 'astro build failed (see output above)' : 'astro build failed; fix the source problems above first']);
-    process.exit(1);
+    return false;
   }
   ok = report('output checks', await outputChecks({ root, site })) && ok;
-  if (!values['no-browser']) {
+  if (browser) {
     const { browserChecks } = await import('../src/check/browser.js');
     ok = report('browser checks', await browserChecks({ root, site })) && ok;
   }
-  if (!ok) process.exit(1);
-  console.log('All checks passed.');
+  if (ok) console.log('All checks passed.');
+  return ok;
+}
+
+async function check(options) {
+  if (!(await runChecks(options))) process.exit(1);
+}
+
+async function deployCommand() {
+  await check({ browser: true }); // a deploy always runs the full check; exits on failure
+  const { deploy } = await import('../src/deploy.js');
+  try {
+    await deploy({ root, site: await loadSite(), dryRun: values['dry-run'], firstDeploy: values['first-deploy'] });
+  } catch (error) {
+    console.error(`✗ deploy: ${error.message}`);
+    process.exit(1);
+  }
 }
 
 switch (command) {
   case 'check':
     await check();
     break;
-  case 'deploy': {
-    values['no-browser'] = false; // a deploy always runs the full check
-    await check(); // exits on failure
-    const { deploy } = await import('../src/deploy.js');
+  case 'deploy':
+    await deployCommand();
+    break;
+  case 'maint': {
+    const maint = await import('../src/maint.js');
+    const [, sub, issue] = positionals;
     try {
-      await deploy({ root, site: await loadSite(), dryRun: values['dry-run'], firstDeploy: values['first-deploy'] });
+      if (sub === 'start') await maint.maintStart({ root, issue });
+      else if (sub === 'finish') await maint.maintFinish({ root, check: (options) => runChecks({ ...options, browser: true }) });
+      else if (sub === 'deploy') {
+        values['dry-run'] = false;
+        values['first-deploy'] = false; // a first deploy is always done by a person
+        await maint.maintDeploy({ root, site: await loadSite(), deploy: deployCommand });
+      } else throw new Error('usage: site-kit maint start <issue> | maint finish | maint deploy');
     } catch (error) {
-      console.error(`✗ deploy: ${error.message}`);
+      console.error(`✗ maint ${sub ?? ''}: ${error.message}`);
       process.exit(1);
     }
     break;
@@ -97,6 +122,6 @@ switch (command) {
     break;
   }
   default:
-    console.error('usage: site-kit check [--no-browser] [--scope <type>] [--base <ref>] | site-kit deploy [--dry-run] [--first-deploy] | site-kit favicon [--source <file>]');
+    console.error('usage: site-kit check [--no-browser] [--scope <type>] [--base <ref>] | site-kit deploy [--dry-run] [--first-deploy] | site-kit favicon [--source <file>] | site-kit maint start <issue>|finish|deploy');
     process.exit(2);
 }

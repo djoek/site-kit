@@ -26,7 +26,7 @@ Shared Astro baseline for small static sites: the parts every site has, so each 
 ## Use in a site
 
 ```sh
-bun add github:djoek/site-kit#v0.1.5 astro sass
+bun add github:djoek/site-kit#v0.1.6 astro sass
 ```
 
 `astro.config.ts`:
@@ -166,6 +166,20 @@ SFTP_KEYFILE=~/.ssh/example-deploy
 The server's host key must already be in `~/.ssh/known_hosts` (connections run with `BatchMode=yes` and never ask).
 
 `--dry-run` shows what would change and skips the git gate. Needs `lftp` installed.
+
+## Maintenance (for the site-maintainer agent)
+
+`package.json` scripts: `"maint:start": "site-kit maint start"`, `"maint:finish": "site-kit maint finish"`, `"maint:deploy": "site-kit maint deploy"`. Needs `git` and the GitHub CLI `gh`, logged in.
+
+```sh
+bun run maint:start 12     # issue #12 must be open and carry exactly one type:<...> label
+# ... change only what the task type allows, add a CHANGELOG.md entry ...
+bun run maint:finish       # scope check + full check, commit, push, pull request "Closes #12"
+# Kris reviews and merges the pull request
+bun run maint:deploy       # main == origin/main, CI green for that commit, deploy, comment on the PR
+```
+
+Merging the pull request is the approval. `maint:deploy` cannot deploy anything that is not merged and green, and never does a first deploy.
 
 ## Develop site-kit
 

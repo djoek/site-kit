@@ -2,6 +2,15 @@
 
 Newest first. Sites pin a version with `github:djoek/site-kit#vX.Y.Z`; read every entry between your pinned version and the new one before bumping.
 
+## 0.1.6 (2026-10-01)
+
+- `site-kit maint start <issue> | finish | deploy`: the maintainer's fixed path from a GitHub issue to a deploy. Sites add them as `maint:start`, `maint:finish`, `maint:deploy` scripts (see README, "Maintenance").
+  - `start`: clean tree, `main` fast-forwarded to `origin/main`, the issue must be open with exactly one `type:<copy|image|page|hours|facts|deps>` label and no `needs-builder`; creates `maint/<n>-<slug>`.
+  - `finish`: requires a `CHANGELOG.md` change, runs `check --scope <type>` plus the full check, commits, pushes, opens a pull request with `Closes #<n>`.
+  - `deploy`: only on `main` identical to `origin/main`, with a completed, green CI run for that exact commit; then `site-kit deploy` (never `--first-deploy`) and a comment on the merged pull request.
+- Scope `image` may also change `src/content/` (alt texts and captions live in the copy files).
+- New test `test:maint` (git flow against a local bare repository and a fake `gh`).
+
 ## 0.1.5 (2026-09-30)
 
 - `embeds` in site.config: third-party content shown in an `<iframe>`, e.g. `[{ name: 'Google Maps', origin: 'https://www.google.com' }]`. Each origin is added to the CSP `frame-src`, and `<PrivacyPolicy>` gets a section naming the services (new i18n keys `privacy.embedsHeading`, `privacy.embeds`). Without `embeds` nothing changes: the CSP still blocks every iframe.

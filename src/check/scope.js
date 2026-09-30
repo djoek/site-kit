@@ -4,7 +4,8 @@ import { spawnSync } from 'node:child_process';
 const ALWAYS = ['CHANGELOG.md'];
 export const SCOPES = {
   copy: [/^src\/content\//],
-  image: [/^public\/images\//, /^src\/assets\//],
+  // Images plus their alt texts and captions, which live in the copy files.
+  image: [/^public\/images\//, /^src\/assets\//, /^src\/content\//],
   page: [/^src\/pages\//, /^src\/content\//, /^public\/images\//, /^src\/assets\//],
   hours: [/^src\/data\/hours\.toml$/],
   facts: [/^site\.config\.ts$/],
