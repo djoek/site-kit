@@ -19,7 +19,7 @@ Shared Astro baseline for small static sites: the parts every site has, so each 
 | Price packages | `<PriceList packages={...}>` |
 | Photo gallery, responsive images | `<Gallery images={...}>` |
 | 301 redirects from old URLs | `redirects` in site.config |
-| Favicons and web manifest | `site-kit favicon` |
+| Favicons and web manifest | `site-kit favicon` (from `public/favicon.svg` or a PNG logo) |
 | Checks | `site-kit check` |
 | Deploy | `site-kit deploy` |
 
@@ -86,6 +86,16 @@ note = { nl = "Kerstmis", en = "Christmas" }   # optional; every site language w
 Options: `--no-browser`, `--scope <copy|image|page|hours|facts|deps>` (fails when the branch changes files outside that task type), `--base <git ref>`.
 
 The browser checks need Chromium: `bunx playwright install chromium`, or point `SITE_KIT_CHROMIUM` at an existing binary.
+
+## Favicons
+
+`site-kit favicon` writes `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` and `site.webmanifest` into `public/`. Source, in this order:
+
+1. `--source <file>` (SVG or PNG);
+2. `public/favicon.svg`, when it is hand-made (OKLCH colours are converted for the rasteriser);
+3. `src/assets/logo.png`: transparent edges trimmed, centred in a square; `public/favicon.svg` is then generated around it.
+
+A site created from the template has a placeholder `public/favicon.svg`. To switch to a PNG logo, run once with `--source src/assets/logo.png`; later runs find the logo by themselves.
 
 ## Deploy
 

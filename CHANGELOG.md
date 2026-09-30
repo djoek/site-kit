@@ -2,6 +2,10 @@
 
 Newest first. Sites pin a version with `github:djoek/site-kit#vX.Y.Z`; read every entry between your pinned version and the new one before bumping.
 
+## 0.1.2 (2026-09-30)
+
+- `site-kit favicon` accepts a raster logo: `src/assets/logo.png` (automatic when there is no hand-made `public/favicon.svg`) or `--source <file>`. Transparent edges are trimmed, the logo is centred in a square, the apple-touch-icon gets a white background, and `public/favicon.svg` is generated as a wrapper around the PNG (marked, so it is never taken as the source).
+
 ## 0.1.1 (2026-09-30)
 
 - `legalName` and `address.postalCode` are optional. Without a legal name the site shows `name` (address block, privacy policy); JSON-LD leaves the missing fields out.

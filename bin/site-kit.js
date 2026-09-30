@@ -2,7 +2,7 @@
 // site-kit command line. Run from a site's root directory.
 //   site-kit check [--no-browser] [--scope <type>] [--base <ref>]
 //   site-kit deploy [--dry-run] [--first-deploy]
-//   site-kit favicon
+//   site-kit favicon [--source <svg or png>]
 import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
@@ -18,6 +18,7 @@ const { positionals, values } = parseArgs({
     base: { type: 'string', default: 'origin/main' },
     'dry-run': { type: 'boolean', default: false },
     'first-deploy': { type: 'boolean', default: false },
+    source: { type: 'string' },
   },
 });
 const [command] = positionals;
@@ -87,10 +88,15 @@ switch (command) {
   }
   case 'favicon': {
     const { favicon } = await import('../src/favicon.js');
-    await favicon({ root, site: await loadSite() });
+    try {
+      await favicon({ root, site: await loadSite(), source: values.source });
+    } catch (error) {
+      console.error(`✗ favicon: ${error.message}`);
+      process.exit(1);
+    }
     break;
   }
   default:
-    console.error('usage: site-kit check [--no-browser] [--scope <type>] [--base <ref>] | site-kit deploy [--dry-run] [--first-deploy] | site-kit favicon');
+    console.error('usage: site-kit check [--no-browser] [--scope <type>] [--base <ref>] | site-kit deploy [--dry-run] [--first-deploy] | site-kit favicon [--source <file>]');
     process.exit(2);
 }
