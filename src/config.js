@@ -29,7 +29,12 @@ const schema = z
     defaultLanguage: z.string().regex(/^[a-z]{2}$/),
     analytics: z
       .object({
-        umami: z.object({ scriptUrl: z.string().url(), websiteId: z.string().min(1) }),
+        umami: z.object({
+          scriptUrl: z.string().url(),
+          websiteId: z.string().min(1),
+          /** Where the script sends its data, when that is not the script's own origin (Umami Cloud: https://gateway.umami.is). */
+          hostUrl: z.string().url().optional(),
+        }),
       })
       .optional(),
     forms: z
@@ -37,6 +42,11 @@ const schema = z
         contact: z.object({ endpoint: z.string().url() }).optional(),
       })
       .default({}),
+    /** Third-party content shown in an <iframe>, e.g. { name: 'Google Maps', origin: 'https://www.google.com' }.
+     *  Each origin is allowed in the CSP frame-src; the privacy policy names each service. */
+    embeds: z
+      .array(z.object({ name: z.string().min(1), origin: z.string().url().refine((v) => new URL(v).origin === v, 'origin only: https://host, no path') }))
+      .default([]),
     /** Path to hours.toml relative to the project root, or false when the site has no opening hours. */
     hours: z.union([z.literal(false), z.string()]).default(false),
     indexNowKey: z.string().regex(/^[A-Za-z0-9-]{8,128}$/).optional(),

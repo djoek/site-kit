@@ -1,6 +1,7 @@
 ---
 // Privacy policy body. Sections follow site.config: analytics and contact-form sections appear
 // only when those are configured. The page supplies the <h1> (copy: kit.privacy.title).
+// Site-specific sections go in the default slot; they appear before "your rights".
 import { site, copyFor, langOf, fmt } from '../runtime.js';
 
 interface Props {
@@ -15,6 +16,7 @@ const values = {
   legalName: site.legalName ?? site.name,
   email: site.email,
   provider: site.hosting?.provider ?? '',
+  embeds: new Intl.ListFormat(lang, { type: 'conjunction' }).format(site.embeds.map((embed) => embed.name)),
   date: new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${site.privacy.lastUpdated}T00:00:00Z`)),
 };
 const sections = [
@@ -23,8 +25,9 @@ const sections = [
   { heading: t.cookiesHeading, body: [t.cookies] },
   ...(site.analytics ? [{ heading: t.analyticsHeading, body: [t.analytics] }] : []),
   ...(site.forms.contact ? [{ heading: t.formHeading, body: [t.form] }] : []),
-  { heading: t.rightsHeading, body: [t.rights] },
+  ...(site.embeds.length ? [{ heading: t.embedsHeading, body: [t.embeds] }] : []),
 ];
+const rights = { heading: t.rightsHeading, body: [t.rights] };
 ---
 <p>{fmt(t.intro, values)}</p>
 {sections.map((section) => (
@@ -33,4 +36,7 @@ const sections = [
     {section.body.map((text) => <p>{fmt(text, values)}</p>)}
   </Fragment>
 ))}
+<slot />
+<Heading>{rights.heading}</Heading>
+{rights.body.map((text) => <p>{fmt(text, values)}</p>)}
 <p><small>{fmt(t.updated, values)}</small></p>

@@ -83,7 +83,7 @@ const jsonLd = {
     <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
     <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
     <script is:inline set:html={themeScript} />
-    {site.analytics && <script is:inline defer src={site.analytics.umami.scriptUrl} data-website-id={site.analytics.umami.websiteId} />}
+    {site.analytics && <script is:inline defer src={site.analytics.umami.scriptUrl} data-website-id={site.analytics.umami.websiteId} data-host-url={site.analytics.umami.hostUrl} />}
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <slot name="head" />
   </head>

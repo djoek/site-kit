@@ -43,6 +43,8 @@
     "analytics": "We count visits with Umami. Umami sets no cookies. We only see totals, such as the number of visits per page.",
     "formHeading": "Contact form",
     "form": "When you use the contact form, we process your name, your message and, if you fill them in, your contact details. Formspree, based in the United States, processes the form and forwards it to us. We use this data only to answer your question and keep it no longer than needed for that.",
+    "embedsHeading": "Content embedded from others",
+    "embeds": "Some pages show content from {embeds}. When you open such a page, your browser loads that content directly from that service. The service then receives technical data such as your IP address and browser details, and applies its own privacy policy to it.",
     "rightsHeading": "Your rights",
     "rights": "You can access, correct or delete your data, and you can object to the processing. Send an email to {email} for this. You can also file a complaint with the Belgian Data Protection Authority (www.dataprotectionauthority.be).",
     "updated": "Last updated: {date}"

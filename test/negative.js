@@ -82,6 +82,10 @@ const results = [
   runCase('site data: exception note missing a language', ['--no-browser'], (work) => {
     edit(work, 'src/data/hours.toml', 'note = { nl = "Kerstmis", en = "Christmas" }', 'note = { nl = "Kerstmis" }');
   }, ['note is missing "en"']),
+
+  runCase('output: iframe from an origin not listed in embeds', ['--no-browser'], (work) => {
+    edit(work, 'src/pages/_Home.astro', '<p>{copy.intro}</p>', '<p>{copy.intro}</p><iframe src="https://maps.example.com/embed"></iframe>');
+  }, ['iframe https://maps.example.com/embed has no title', 'iframe from https://maps.example.com is not listed in embeds']),
 ];
 
 process.exit(results.every(Boolean) ? 0 : 1);

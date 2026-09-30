@@ -53,14 +53,17 @@ export function buildCsp(site, pages, extra = {}) {
     for (const body of page.inlineScripts) hashes.add(`'sha256-${createHash('sha256').update(body).digest('base64')}'`);
   }
   const analytics = site.analytics ? new URL(site.analytics.umami.scriptUrl).origin : null;
+  const analyticsHost = site.analytics?.umami.hostUrl ? new URL(site.analytics.umami.hostUrl).origin : analytics;
+  const frames = [...new Set((site.embeds ?? []).map((embed) => embed.origin))];
   const form = site.forms.contact ? new URL(site.forms.contact.endpoint).origin : null;
   const directives = {
     'default-src': ["'self'"],
     'script-src': ["'self'", ...(analytics ? [analytics] : []), ...[...hashes].sort()],
-    'connect-src': ["'self'", ...(analytics ? [analytics] : [])],
+    'connect-src': ["'self'", ...(analyticsHost ? [analyticsHost] : [])],
     'img-src': ["'self'", 'data:'],
     'style-src': ["'self'"],
     'font-src': ["'self'"],
+    ...(frames.length ? { 'frame-src': frames } : {}),
     'form-action': ["'self'", ...(form ? [form] : [])],
     'base-uri': ["'self'"],
     'frame-ancestors': ["'none'"],

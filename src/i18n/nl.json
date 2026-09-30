@@ -43,6 +43,8 @@
     "analytics": "We tellen bezoeken met Umami. Umami plaatst geen cookies. We zien alleen totalen, zoals het aantal bezoeken per pagina.",
     "formHeading": "Contactformulier",
     "form": "Als je het contactformulier gebruikt, verwerken we je naam, je bericht en, als je die invult, je contactgegevens. Formspree, gevestigd in de Verenigde Staten, verwerkt het formulier en stuurt het naar ons door. We gebruiken deze gegevens alleen om je vraag te beantwoorden en bewaren ze niet langer dan daarvoor nodig is.",
+    "embedsHeading": "Ingesloten inhoud van anderen",
+    "embeds": "Sommige pagina's tonen inhoud van {embeds}. Wanneer je zo'n pagina opent, laadt je browser die inhoud rechtstreeks bij die dienst. Die dienst ontvangt dan technische gegevens zoals je IP-adres en browsergegevens, en past daarop zijn eigen privacybeleid toe.",
     "rightsHeading": "Je rechten",
     "rights": "Je kunt je gegevens inzien, laten verbeteren of laten wissen, en je kunt bezwaar maken tegen de verwerking. Stuur daarvoor een e-mail naar {email}. Je kunt ook een klacht indienen bij de Gegevensbeschermingsautoriteit (www.gegevensbeschermingsautoriteit.be).",
     "updated": "Laatst bijgewerkt: {date}"

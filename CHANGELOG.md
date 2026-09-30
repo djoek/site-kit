@@ -2,6 +2,13 @@
 
 Newest first. Sites pin a version with `github:djoek/site-kit#vX.Y.Z`; read every entry between your pinned version and the new one before bumping.
 
+## 0.1.5 (2026-09-30)
+
+- `embeds` in site.config: third-party content shown in an `<iframe>`, e.g. `[{ name: 'Google Maps', origin: 'https://www.google.com' }]`. Each origin is added to the CSP `frame-src`, and `<PrivacyPolicy>` gets a section naming the services (new i18n keys `privacy.embedsHeading`, `privacy.embeds`). Without `embeds` nothing changes: the CSP still blocks every iframe.
+- `check` fails on an `<iframe>` without `title`, or from an origin that is not listed in `embeds`. New negative test.
+- `analytics.umami.hostUrl` (optional): where the script sends its data when that is not the script's origin. Umami Cloud needs `hostUrl: 'https://gateway.umami.is'`. The script gets `data-host-url`, and the CSP `connect-src` allows that origin instead of the script's. Self-hosted Umami needs no change.
+- `<PrivacyPolicy>` has a default slot for site-specific sections. They appear before "your rights".
+
 ## 0.1.4 (2026-09-30)
 
 - `<OpeningHours compact>` groups consecutive days with the same hours into one row ("woensdag t.e.m. zaterdag"); `hideClosed` leaves out closed days. New i18n key `hours.through` ("t.e.m." / "to"). Both props are off by default, so existing sites render the same.

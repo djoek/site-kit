@@ -235,6 +235,18 @@ export async function outputChecks({ root, site }) {
       else if (umami[0].getAttribute('data-website-id') !== site.analytics.umami.websiteId) fail(scope, 'Umami website id differs from site.config');
     } else if (umami.length) fail(scope, 'Umami script present but analytics is not configured');
 
+    // Embedded third-party content must be declared, so the CSP allows it and the privacy policy names it.
+    const embedOrigins = new Set((site.embeds ?? []).map((embed) => embed.origin));
+    for (const frame of document.querySelectorAll('iframe')) {
+      const src = frame.getAttribute('src') ?? '';
+      if (!frame.getAttribute('title')) fail(scope, `iframe ${src} has no title`);
+      let origin = null;
+      try {
+        origin = new URL(src).origin;
+      } catch {}
+      if (origin && !embedOrigins.has(origin)) fail(scope, `iframe from ${origin} is not listed in embeds in site.config`);
+    }
+
     // JSON-LD.
     const blocks = [...document.querySelectorAll('script[type="application/ld+json"]')];
     if (!blocks.length) fail(scope, 'missing JSON-LD');

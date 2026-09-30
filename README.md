@@ -26,7 +26,7 @@ Shared Astro baseline for small static sites: the parts every site has, so each 
 ## Use in a site
 
 ```sh
-bun add github:djoek/site-kit#v0.1.0 astro sass
+bun add github:djoek/site-kit#v0.1.5 astro sass
 ```
 
 `astro.config.ts`:
@@ -85,6 +85,20 @@ With that block, site-kit does the rest; do not add the script or CSP entries by
 - `site-kit check` fails when the script is missing, appears more than once, has a different website ID, or is present without `analytics` in the config.
 
 Without an `analytics` block a site has no analytics at all.
+
+A site that still uses Umami Cloud (`https://cloud.umami.is/script.js`) also sets `hostUrl: 'https://gateway.umami.is'`: the Cloud script sends its data there, not to its own origin, and the CSP must allow it.
+
+## Embedded content (maps, video)
+
+The CSP blocks every `<iframe>` unless its origin is listed in `site.config.ts`:
+
+```ts
+embeds: [{ name: 'Google Maps', origin: 'https://www.google.com' }],
+```
+
+Each origin goes into `frame-src`, and `<PrivacyPolicy>` names each service in a section about embedded content. `check` fails on an iframe from an unlisted origin or without a `title`. An embed sends visitor data to that service, so adding one is a privacy change: update `privacy.lastUpdated`.
+
+Site-specific privacy sections go inside the component: `<PrivacyPolicy><h2>…</h2><p>…</p></PrivacyPolicy>`.
 
 ## Opening hours
 
