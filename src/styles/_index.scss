@@ -1,0 +1,321 @@
+@use 'sass:map';
+
+// site-kit base styles. Classless: elements and structure are styled, not class names.
+// Use in a site:   @use '@djoek/site-kit/styles' as kit;
+//                  @include kit.themes($light: (...), $dark: (...));
+// Configure:       @use '@djoek/site-kit/styles' as kit with ($nav-breakpoint: 48rem);
+
+$nav-breakpoint: 42rem !default;
+
+/// Light and dark seed colours. Each map needs canvas, ink and brand, all oklch().
+/// Every other colour is derived from these three in OKLCH space.
+@mixin themes($light, $dark) {
+  :root {
+    @include _seeds($light);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      @include _seeds($dark);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme='dark'] {
+    @include _seeds($dark);
+    color-scheme: dark;
+  }
+}
+
+@mixin _seeds($seeds) {
+  --seed-canvas: #{map.get($seeds, canvas)};
+  --seed-ink: #{map.get($seeds, ink)};
+  --seed-brand: #{map.get($seeds, brand)};
+}
+
+/*
+ * Reset adapted from Josh W. Comeau's "A Modern CSS Reset"
+ * https://www.joshwcomeau.com/css/custom-css-reset/
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+*:not(dialog) {
+  margin: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+    scroll-behavior: smooth;
+  }
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  isolation: isolate;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+// Semantic tokens, derived from the seeds.
+:root {
+  --seed-canvas: oklch(97% 0.008 250);
+  --seed-ink: oklch(24% 0.012 250);
+  --seed-brand: oklch(45% 0.1 250);
+
+  --color-bg: var(--seed-canvas);
+  --color-surface: color-mix(in oklch, var(--seed-canvas) 95%, var(--seed-ink));
+  --color-text: var(--seed-ink);
+  --color-muted: color-mix(in oklch, var(--seed-ink) 72%, var(--seed-canvas));
+  --color-border: color-mix(in oklch, var(--seed-ink) 25%, var(--seed-canvas));
+  --color-accent: var(--seed-brand);
+  --color-accent-strong: color-mix(in oklch, var(--seed-brand) 78%, var(--seed-ink));
+  --color-on-accent: var(--seed-canvas);
+  --color-shadow: color-mix(in oklch, var(--seed-ink) 18%, oklch(0% 0 0 / 0));
+  --gradient-accent: linear-gradient(135deg in oklch, var(--color-accent), var(--color-accent-strong));
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --measure: 68rem;
+  --prose: 44rem;
+  --space: clamp(1rem, 2.5vw, 2rem);
+}
+
+body {
+  min-width: 20rem;
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+a {
+  color: var(--color-accent);
+  text-underline-offset: 0.18em;
+}
+
+:focus-visible {
+  outline: 0.2rem solid var(--color-accent);
+  outline-offset: 0.2rem;
+}
+
+main:focus {
+  outline: none;
+}
+
+// Skip link: first element in <body>, visible only when focused.
+body > a[href='#main']:first-child {
+  position: fixed;
+  inset: 0.5rem auto auto 0.5rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--color-surface);
+  transform: translateY(-150%);
+
+  &:focus {
+    transform: none;
+  }
+}
+
+// The one utility class: text for assistive technology only.
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Eyebrow: <hgroup><p>Eyebrow</p><h2>Heading</h2></hgroup>
+hgroup > p:first-child {
+  color: var(--color-muted);
+  font-size: 0.875em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+button {
+  width: fit-content;
+  padding: 0.6rem 1rem;
+  border: 0.125rem solid var(--color-accent);
+  border-radius: 0.25rem;
+  background: var(--gradient-accent);
+  color: var(--color-on-accent);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+// Theme toggle: needs JavaScript, so hidden until the head script has set data-theme.
+:root:not([data-theme]) [data-theme-toggle] {
+  display: none;
+}
+[data-theme-toggle] {
+  display: inline-grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border-color: var(--color-border);
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+// Navigation lists.
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+// Main navigation: inline on wide screens, Popover on small screens.
+button[popovertarget] {
+  display: none;
+}
+nav[popover] {
+  position: static;
+  inset: auto;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  overflow: visible;
+}
+@media (max-width: $nav-breakpoint) {
+  button[popovertarget] {
+    display: inline-flex;
+  }
+  nav[popover] {
+    display: none;
+    position: fixed;
+    inset: 4rem var(--space) auto;
+    margin: 0;
+    padding: 1.25rem;
+    border: 0.1rem solid var(--color-border);
+    background: var(--color-surface);
+    box-shadow: 0 1rem 3rem var(--color-shadow);
+
+    &:popover-open {
+      display: block;
+    }
+    ul {
+      display: grid;
+    }
+  }
+  @supports not selector(:popover-open) {
+    button[popovertarget] {
+      display: none;
+    }
+    nav[popover] {
+      display: block;
+      position: static;
+      padding: 0;
+      border: 0;
+      box-shadow: none;
+    }
+  }
+}
+
+// Forms: one <p> per field.
+form {
+  display: grid;
+  gap: 1rem;
+  max-width: var(--prose);
+
+  p {
+    display: grid;
+    gap: 0.35rem;
+  }
+  // Honeypot field for bots.
+  p:has(> input[name='_gotcha']) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 0.1rem solid var(--color-border);
+  border-radius: 0.25rem;
+  background: var(--color-surface);
+  color: inherit;
+}
+small {
+  color: var(--color-muted);
+}
+
+table {
+  border-collapse: collapse;
+}
+caption {
+  padding-block: 0.5rem;
+  font-weight: 700;
+  text-align: start;
+}
+th,
+td {
+  padding: 0.35rem 1rem 0.35rem 0;
+  border-bottom: 0.0625rem solid var(--color-border);
+  text-align: start;
+  vertical-align: top;
+}
+
+address {
+  font-style: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+  }
+}

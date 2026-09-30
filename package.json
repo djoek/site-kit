@@ -1,0 +1,42 @@
+{
+  "name": "@djoek/site-kit",
+  "version": "0.1.0",
+  "description": "Shared Astro baseline for small static sites: semantic document shell, theming, SEO, opening hours, checks and deploy.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./config": "./src/config.js",
+    "./runtime": "./src/runtime.js",
+    "./components/*": "./src/components/*",
+    "./styles": "./src/styles/_index.scss",
+    "./styles/*": "./src/styles/*"
+  },
+  "bin": {
+    "site-kit": "./bin/site-kit.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "peerDependencies": {
+    "astro": "^7.3.0"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "linkedom": "^0.18.12",
+    "playwright": "^1.56.0",
+    "smol-toml": "^1.4.2"
+  },
+  "scripts": {
+    "test": "bun run test:fixture && bun run test:negative",
+    "test:fixture": "cd fixtures/basic && bun install --force && bun run check",
+    "test:negative": "bun test/negative.js"
+  },
+  "devDependencies": {
+    "astro": "7.3.5",
+    "sass": "^1.93.0"
+  }
+}

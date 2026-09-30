@@ -1,0 +1,23 @@
+---
+// Contact details from site.config, in an <address> element.
+import { site, copyFor, langOf } from '../runtime.js';
+
+interface Props {
+  /** Also show the company (VAT) number. */
+  vat?: boolean;
+}
+const { vat = false } = Astro.props;
+const t = copyFor(langOf(Astro.currentLocale)).kit.address;
+const a = site.address;
+---
+<address>
+  <p>
+    {site.legalName}
+    {a && <Fragment><br />{a.street}<br />{`${a.postalCode} ${a.locality}`}</Fragment>}
+  </p>
+  <p>
+    {site.phone && <Fragment>{t.phone}: <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a><br /></Fragment>}
+    {t.email}: <a href={`mailto:${site.email}`}>{site.email}</a>
+    {vat && site.vatNumber && <Fragment><br />{t.vat}: {site.vatNumber}</Fragment>}
+  </p>
+</address>

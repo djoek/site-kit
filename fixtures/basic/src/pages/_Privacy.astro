@@ -1,0 +1,12 @@
+---
+import Page from '../layouts/Page.astro';
+import PrivacyPolicy from '@djoek/site-kit/components/PrivacyPolicy.astro';
+import { copyFor, langOf } from '@djoek/site-kit/runtime';
+const copy = copyFor(langOf(Astro.currentLocale));
+---
+<Page title={copy.kit.privacy.title} description={copy.privacy.description} translations={{ nl: '/privacy/', en: '/en/privacy/' }}>
+  <section aria-labelledby="privacy-title">
+    <h1 id="privacy-title">{copy.kit.privacy.title}</h1>
+    <PrivacyPolicy />
+  </section>
+</Page>

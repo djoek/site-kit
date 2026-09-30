@@ -1,0 +1,36 @@
+---
+// Privacy policy body. Sections follow site.config: analytics and contact-form sections appear
+// only when those are configured. The page supplies the <h1> (copy: kit.privacy.title).
+import { site, copyFor, langOf, fmt } from '../runtime.js';
+
+interface Props {
+  /** Heading level for the sections. */
+  level?: 2 | 3;
+}
+const { level = 2 } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const t = copyFor(lang).kit.privacy;
+const Heading = `h${level}`;
+const values = {
+  legalName: site.legalName,
+  email: site.email,
+  provider: site.hosting?.provider ?? '',
+  date: new Intl.DateTimeFormat(lang, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${site.privacy.lastUpdated}T00:00:00Z`)),
+};
+const sections = [
+  { heading: t.controllerHeading, body: [t.controller] },
+  { heading: t.hostingHeading, body: [t.hosting, ...(site.hosting ? [t.hostingProvider] : [])] },
+  { heading: t.cookiesHeading, body: [t.cookies] },
+  ...(site.analytics ? [{ heading: t.analyticsHeading, body: [t.analytics] }] : []),
+  ...(site.forms.contact ? [{ heading: t.formHeading, body: [t.form] }] : []),
+  { heading: t.rightsHeading, body: [t.rights] },
+];
+---
+<p>{fmt(t.intro, values)}</p>
+{sections.map((section) => (
+  <Fragment>
+    <Heading>{section.heading}</Heading>
+    {section.body.map((text) => <p>{fmt(text, values)}</p>)}
+  </Fragment>
+))}
+<p><small>{fmt(t.updated, values)}</small></p>

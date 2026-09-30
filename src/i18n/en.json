@@ -1,0 +1,49 @@
+{
+  "skipLink": "Skip to content",
+  "menu": "Menu",
+  "navLabel": "Main navigation",
+  "themeToggle": "Dark theme",
+  "languageSwitcher": "Other language",
+  "form": {
+    "name": "Name",
+    "reply": "How can we reach you? (optional)",
+    "replyHint": "Email address, phone number or something else",
+    "message": "How can we help?",
+    "submit": "Send",
+    "honeypot": "Leave this field empty",
+    "status": "Your message is sent through Formspree."
+  },
+  "hours": {
+    "caption": "Opening hours",
+    "exceptionsCaption": "Changed opening hours",
+    "closed": "Closed",
+    "day": "Day",
+    "date": "Date",
+    "times": "Hours",
+    "note": "Note",
+    "until": "until"
+  },
+  "address": {
+    "phone": "Phone",
+    "email": "Email",
+    "vat": "Company number"
+  },
+  "privacy": {
+    "title": "Privacy policy",
+    "intro": "{legalName} runs this website. This policy explains which personal data we process through this website and why.",
+    "controllerHeading": "Who is responsible?",
+    "controller": "{legalName} is responsible for the processing. Send privacy questions to {email}.",
+    "hostingHeading": "Hosting and server logs",
+    "hosting": "When you visit this website, the web server records technical data such as your IP address, the time and the requested page. This is needed to keep the website secure and working.",
+    "hostingProvider": "The website is hosted by {provider}.",
+    "cookiesHeading": "Cookies",
+    "cookies": "This website sets no cookies. Your choice of a light or dark theme is stored only in your own browser.",
+    "analyticsHeading": "Visitor statistics",
+    "analytics": "We count visits with Umami. Umami sets no cookies. We only see totals, such as the number of visits per page.",
+    "formHeading": "Contact form",
+    "form": "When you use the contact form, we process your name, your message and, if you fill them in, your contact details. Formspree, based in the United States, processes the form and forwards it to us. We use this data only to answer your question and keep it no longer than needed for that.",
+    "rightsHeading": "Your rights",
+    "rights": "You can access, correct or delete your data, and you can object to the processing. Send an email to {email} for this. You can also file a complaint with the Belgian Data Protection Authority (www.dataprotectionauthority.be).",
+    "updated": "Last updated: {date}"
+  }
+}

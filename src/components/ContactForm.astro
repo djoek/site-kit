@@ -1,0 +1,34 @@
+---
+// Optional contact form. Works without JavaScript: posts straight to Formspree.
+// Requires forms.contact.endpoint in site.config.
+import { site, copyFor, langOf } from '../runtime.js';
+
+interface Props {
+  /** Prefix for element ids; change it only if a page has two forms. */
+  id?: string;
+}
+const { id = 'contact' } = Astro.props;
+if (!site.forms.contact) throw new Error('site-kit: <ContactForm> needs forms.contact.endpoint in site.config');
+const t = copyFor(langOf(Astro.currentLocale)).kit.form;
+---
+<form action={site.forms.contact.endpoint} method="post">
+  <p aria-hidden="true">
+    <label for={`${id}-gotcha`}>{t.honeypot}</label>
+    <input id={`${id}-gotcha`} name="_gotcha" type="text" tabindex="-1" autocomplete="off" />
+  </p>
+  <p>
+    <label for={`${id}-name`}>{t.name}</label>
+    <input id={`${id}-name`} name="name" type="text" autocomplete="name" required />
+  </p>
+  <p>
+    <label for={`${id}-reply`}>{t.reply}</label>
+    <input id={`${id}-reply`} name="reply" type="text" aria-describedby={`${id}-reply-hint`} />
+    <small id={`${id}-reply-hint`}>{t.replyHint}</small>
+  </p>
+  <p>
+    <label for={`${id}-message`}>{t.message}</label>
+    <textarea id={`${id}-message`} name="message" rows="6" required></textarea>
+  </p>
+  <p><button type="submit">{t.submit}</button></p>
+  <p role="status"><small>{t.status}</small></p>
+</form>

@@ -1,0 +1,20 @@
+---
+// Main navigation. On small screens it becomes a Popover opened by the menu button;
+// where Popover is unsupported the links stay visible.
+import { copyFor, langOf } from '../runtime.js';
+
+interface Props {
+  items: { href: string; label: string }[];
+}
+const { items } = Astro.props;
+const kit = copyFor(langOf(Astro.currentLocale)).kit;
+const current = Astro.url.pathname;
+---
+<button type="button" popovertarget="site-nav">{kit.menu}</button>
+<nav id="site-nav" popover aria-label={kit.navLabel}>
+  <ul>
+    {items.map((item) => (
+      <li><a href={item.href} aria-current={item.href === current ? 'page' : undefined}>{item.label}</a></li>
+    ))}
+  </ul>
+</nav>

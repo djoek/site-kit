@@ -1,0 +1,24 @@
+---
+import Page from '../layouts/Page.astro';
+import OpeningHours from '@djoek/site-kit/components/OpeningHours.astro';
+import ContactForm from '@djoek/site-kit/components/ContactForm.astro';
+import { copyFor, langOf } from '@djoek/site-kit/runtime';
+const copy = copyFor(langOf(Astro.currentLocale)).home;
+---
+<Page title={copy.title} description={copy.description} translations={{ nl: '/', en: '/en/' }}>
+  <section aria-labelledby="intro">
+    <hgroup>
+      <p>{copy.eyebrow}</p>
+      <h1 id="intro">{copy.heading}</h1>
+    </hgroup>
+    <p>{copy.intro}</p>
+  </section>
+  <section id="hours" aria-labelledby="hours-heading">
+    <h2 id="hours-heading">{copy.hoursHeading}</h2>
+    <OpeningHours />
+  </section>
+  <section id="contact" aria-labelledby="contact-heading">
+    <h2 id="contact-heading">{copy.contactHeading}</h2>
+    <ContactForm />
+  </section>
+</Page>

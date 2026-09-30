@@ -1,0 +1,16 @@
+{
+  "name": "site-kit-fixture-basic",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "check": "site-kit check",
+    "deploy": "site-kit deploy"
+  },
+  "dependencies": {
+    "@djoek/site-kit": "file:../..",
+    "astro": "7.3.5",
+    "sass": "^1.93.0"
+  }
+}

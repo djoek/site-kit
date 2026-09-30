@@ -1,0 +1,49 @@
+{
+  "skipLink": "Naar de inhoud",
+  "menu": "Menu",
+  "navLabel": "Hoofdnavigatie",
+  "themeToggle": "Donker thema",
+  "languageSwitcher": "Andere taal",
+  "form": {
+    "name": "Naam",
+    "reply": "Hoe kunnen we je bereiken? (optioneel)",
+    "replyHint": "E-mailadres, telefoonnummer of iets anders",
+    "message": "Waarmee kunnen we helpen?",
+    "submit": "Verstuur",
+    "honeypot": "Laat dit veld leeg",
+    "status": "Je bericht wordt verstuurd via Formspree."
+  },
+  "hours": {
+    "caption": "Openingsuren",
+    "exceptionsCaption": "Aangepaste openingsuren",
+    "closed": "Gesloten",
+    "day": "Dag",
+    "date": "Datum",
+    "times": "Uren",
+    "note": "Opmerking",
+    "until": "tot en met"
+  },
+  "address": {
+    "phone": "Telefoon",
+    "email": "E-mail",
+    "vat": "Ondernemingsnummer"
+  },
+  "privacy": {
+    "title": "Privacyverklaring",
+    "intro": "{legalName} beheert deze website. Deze verklaring legt uit welke persoonsgegevens we via deze website verwerken en waarom.",
+    "controllerHeading": "Wie is verantwoordelijk?",
+    "controller": "{legalName} is verantwoordelijk voor de verwerking. Vragen over privacy kun je sturen naar {email}.",
+    "hostingHeading": "Hosting en serverlogs",
+    "hosting": "Wanneer je deze website bezoekt, registreert de webserver technische gegevens zoals je IP-adres, het tijdstip en de opgevraagde pagina. Dat is nodig om de website veilig en werkend te houden.",
+    "hostingProvider": "De website wordt gehost door {provider}.",
+    "cookiesHeading": "Cookies",
+    "cookies": "Deze website plaatst geen cookies. Je keuze voor een licht of donker thema wordt alleen in je eigen browser bewaard.",
+    "analyticsHeading": "Bezoekersstatistieken",
+    "analytics": "We tellen bezoeken met Umami. Umami plaatst geen cookies. We zien alleen totalen, zoals het aantal bezoeken per pagina.",
+    "formHeading": "Contactformulier",
+    "form": "Als je het contactformulier gebruikt, verwerken we je naam, je bericht en, als je die invult, je contactgegevens. Formspree, gevestigd in de Verenigde Staten, verwerkt het formulier en stuurt het naar ons door. We gebruiken deze gegevens alleen om je vraag te beantwoorden en bewaren ze niet langer dan daarvoor nodig is.",
+    "rightsHeading": "Je rechten",
+    "rights": "Je kunt je gegevens inzien, laten verbeteren of laten wissen, en je kunt bezwaar maken tegen de verwerking. Stuur daarvoor een e-mail naar {email}. Je kunt ook een klacht indienen bij de Gegevensbeschermingsautoriteit (www.gegevensbeschermingsautoriteit.be).",
+    "updated": "Laatst bijgewerkt: {date}"
+  }
+}

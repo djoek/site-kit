@@ -1,0 +1,42 @@
+@use '@djoek/site-kit/styles' as kit;
+
+@include kit.themes(
+  $light: (canvas: oklch(97% 0.012 80), ink: oklch(25% 0.02 60), brand: oklch(47% 0.12 45)),
+  $dark: (canvas: oklch(20% 0.015 60), ink: oklch(94% 0.012 80), brand: oklch(78% 0.11 60))
+);
+
+body > header,
+body > footer,
+main {
+  width: min(100% - 2 * var(--space), var(--measure));
+  margin-inline: auto;
+}
+
+body > header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding-block: 1.25rem;
+
+  > a:first-child {
+    margin-inline-end: auto;
+    color: inherit;
+    font-weight: 750;
+    text-decoration: none;
+  }
+}
+
+main > section {
+  display: grid;
+  gap: 1rem;
+  padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+body > footer {
+  display: grid;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding-block: 2rem;
+  border-top: 0.1rem solid var(--color-border);
+}

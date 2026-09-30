@@ -1,0 +1,95 @@
+---
+// The document shell every page uses. Renders <html>, <head>, the skip link and the one <main>.
+// The site's own layout fills the "header" and "footer" slots and puts page content in the default slot.
+import { site, hours, copyFor, langOf } from '../runtime.js';
+import { hoursJsonLd } from '../hours.js';
+import { themeScript } from '../theme-script.js';
+
+interface Props {
+  /** Page title without the site name; the site name is appended automatically. */
+  title: string;
+  description: string;
+  /** Reachable but kept out of search engines, sitemap and llms.txt. */
+  unlisted?: boolean;
+  /** Same page in every language: { nl: '/over/', en: '/en/about/' }. */
+  translations?: Record<string, string>;
+  /** Absolute path of a social image, e.g. '/og-image.png'. */
+  image?: string;
+}
+
+const { title, description, unlisted = false, translations = {}, image } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const kit = copyFor(lang).kit;
+const pathname = Astro.url.pathname;
+const isNotFound = /^\/404(\.html|\/)?$/.test(pathname);
+const canonical = new URL(pathname, site.url).href;
+const fullTitle = title === site.name ? title : `${title} · ${site.name}`;
+const noindex = unlisted || isNotFound;
+const alternates = Object.entries(translations);
+
+const organization = {
+  '@type': site.schemaType,
+  '@id': `${site.url}/#organization`,
+  name: site.name,
+  legalName: site.legalName,
+  url: `${site.url}/`,
+  email: site.email,
+  ...(site.phone ? { telephone: site.phone } : {}),
+  ...(site.vatNumber ? { vatID: site.vatNumber } : {}),
+  ...(site.address
+    ? {
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: site.address.street,
+          postalCode: site.address.postalCode,
+          addressLocality: site.address.locality,
+          addressCountry: site.address.country,
+        },
+      }
+    : {}),
+  ...(hours ? hoursJsonLd(hours) : {}),
+};
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    organization,
+    { '@type': 'WebSite', '@id': `${site.url}/#website`, url: `${site.url}/`, name: site.name, publisher: { '@id': `${site.url}/#organization` }, inLanguage: site.languages },
+    { '@type': 'WebPage', '@id': `${canonical}#webpage`, url: canonical, name: title, description, isPartOf: { '@id': `${site.url}/#website` }, inLanguage: lang },
+  ],
+};
+---
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow'} />
+    {!isNotFound && <link rel="canonical" href={canonical} />}
+    {alternates.map(([language, href]) => <link rel="alternate" hreflang={language} href={new URL(href, site.url).href} />)}
+    {translations[site.defaultLanguage] && <link rel="alternate" hreflang="x-default" href={new URL(translations[site.defaultLanguage], site.url).href} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {image && <meta property="og:image" content={new URL(image, site.url).href} />}
+    {image && <meta name="twitter:card" content="summary_large_image" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt" />
+    <script is:inline set:html={themeScript} />
+    {site.analytics && <script is:inline defer src={site.analytics.umami.scriptUrl} data-website-id={site.analytics.umami.websiteId} />}
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main">{kit.skipLink}</a>
+    <slot name="header" />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

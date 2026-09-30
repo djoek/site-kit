@@ -1,0 +1,16 @@
+{
+  "site": { "description": "Artisan bakery in Boechout with bread, cakes and pastries." },
+  "nav": { "home": "Home", "hours": "Opening hours", "contact": "Contact", "privacy": "Privacy" },
+  "home": {
+    "title": "Voorbeeld Bakery",
+    "description": "Fresh bread and cakes, baked every day in Boechout.",
+    "eyebrow": "Since 1987",
+    "heading": "Freshly baked in Boechout",
+    "intro": "Every morning we bake bread, cakes and pastries by hand.",
+    "hoursHeading": "When are we open?",
+    "contactHeading": "Send us a message"
+  },
+  "privacy": { "description": "How Voorbeeld Bakery handles personal data." },
+  "notFound": { "title": "Page not found", "description": "This page does not exist.", "body": "This page does not exist (anymore).", "back": "Back to the home page" },
+  "footer": { "privacy": "Privacy policy" }
+}

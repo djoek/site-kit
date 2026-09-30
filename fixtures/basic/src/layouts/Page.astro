@@ -1,0 +1,39 @@
+---
+import Document from '@djoek/site-kit/components/Document.astro';
+import Nav from '@djoek/site-kit/components/Nav.astro';
+import ThemeToggle from '@djoek/site-kit/components/ThemeToggle.astro';
+import LanguageSwitcher from '@djoek/site-kit/components/LanguageSwitcher.astro';
+import Address from '@djoek/site-kit/components/Address.astro';
+import { site, copyFor, langOf } from '@djoek/site-kit/runtime';
+import '../styles/site.scss';
+
+interface Props {
+  title: string;
+  description: string;
+  translations?: Record<string, string>;
+  unlisted?: boolean;
+}
+const { translations = {}, ...rest } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const copy = copyFor(lang);
+const prefix = lang === site.defaultLanguage ? '/' : `/${lang}/`;
+const items = [
+  { href: prefix, label: copy.nav.home },
+  { href: `${prefix}#hours`, label: copy.nav.hours },
+  { href: `${prefix}#contact`, label: copy.nav.contact },
+  { href: `${prefix}privacy/`, label: copy.nav.privacy },
+];
+---
+<Document {...rest} translations={translations}>
+  <header slot="header">
+    <a href={prefix}>{site.name}</a>
+    <Nav items={items} />
+    <LanguageSwitcher translations={translations} />
+    <ThemeToggle />
+  </header>
+  <slot />
+  <footer slot="footer">
+    <Address vat />
+    <p><a href={`${prefix}privacy/`}>{copy.footer.privacy}</a></p>
+  </footer>
+</Document>

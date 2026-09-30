@@ -1,0 +1,62 @@
+---
+// Opening hours from the site's hours.toml: the regular week, then every exception in the file.
+// Exceptions stay visible until they are removed from the file.
+import { hours, copyFor, langOf } from '../runtime.js';
+import { DAYS, weekdayNames, formatDate } from '../hours.js';
+
+if (!hours) throw new Error('site-kit: <OpeningHours> needs hours = "src/data/hours.toml" in site.config');
+const lang = langOf(Astro.currentLocale);
+const t = copyFor(lang).kit.hours;
+const names = weekdayNames(lang);
+const hasNotes = hours.exceptions.some((e) => e.note[lang]);
+---
+<table>
+  <caption>{t.caption}</caption>
+  <thead>
+    <tr><th scope="col">{t.day}</th><th scope="col">{t.times}</th></tr>
+  </thead>
+  <tbody>
+    {DAYS.map((day, index) => (
+      <tr>
+        <th scope="row">{names[index]}</th>
+        <td>
+          {hours.week[day].length === 0
+            ? t.closed
+            : hours.week[day].map(([open, close], i) => (
+                <Fragment>{i > 0 && ', '}<time datetime={open}>{open}</time>–<time datetime={close}>{close}</time></Fragment>
+              ))}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+{hours.exceptions.length > 0 && (
+  <table>
+    <caption>{t.exceptionsCaption}</caption>
+    <thead>
+      <tr>
+        <th scope="col">{t.date}</th>
+        <th scope="col">{t.times}</th>
+        {hasNotes && <th scope="col">{t.note}</th>}
+      </tr>
+    </thead>
+    <tbody>
+      {hours.exceptions.map((e) => (
+        <tr>
+          <th scope="row">
+            <time datetime={e.date}>{formatDate(e.date, lang)}</time>
+            {e.to && <Fragment>{` ${t.until} `}<time datetime={e.to}>{formatDate(e.to, lang)}</time></Fragment>}
+          </th>
+          <td>
+            {e.closed
+              ? t.closed
+              : e.hours.map(([open, close], i) => (
+                  <Fragment>{i > 0 && ', '}<time datetime={open}>{open}</time>–<time datetime={close}>{close}</time></Fragment>
+                ))}
+          </td>
+          {hasNotes && <td>{e.note[lang] ?? ''}</td>}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}

@@ -1,0 +1,24 @@
+---
+// Links to the same page in the other languages. Language names come from Intl (each in its own language).
+import { site, copyFor, langOf } from '../runtime.js';
+
+interface Props {
+  translations: Record<string, string>;
+}
+const { translations } = Astro.props;
+const lang = langOf(Astro.currentLocale);
+const kit = copyFor(lang).kit;
+const entries = site.languages.filter((l) => translations[l]).map((l) => {
+  const name = new Intl.DisplayNames([l], { type: 'language' }).of(l) ?? l;
+  return { lang: l, href: translations[l], name: name.charAt(0).toLocaleUpperCase(l) + name.slice(1) };
+});
+---
+{entries.length > 1 && (
+  <nav aria-label={kit.languageSwitcher}>
+    <ul>
+      {entries.map((entry) => (
+        <li><a href={entry.href} hreflang={entry.lang} lang={entry.lang} aria-current={entry.lang === lang ? 'page' : undefined}>{entry.name}</a></li>
+      ))}
+    </ul>
+  </nav>
+)}

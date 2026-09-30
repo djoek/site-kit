@@ -1,0 +1,9 @@
+---
+// Light/dark switch. aria-pressed="true" means dark. Hidden when JavaScript is off (the system theme applies then).
+import { copyFor, langOf } from '../runtime.js';
+const kit = copyFor(langOf(Astro.currentLocale)).kit;
+---
+<button type="button" data-theme-toggle aria-pressed="false">
+  <span aria-hidden="true"><slot>◐</slot></span>
+  <span class="visually-hidden">{kit.themeToggle}</span>
+</button>

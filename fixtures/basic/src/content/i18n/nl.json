@@ -1,0 +1,16 @@
+{
+  "site": { "description": "Ambachtelijke bakkerij in Boechout met brood, taart en koffiekoeken." },
+  "nav": { "home": "Home", "hours": "Openingsuren", "contact": "Contact", "privacy": "Privacy" },
+  "home": {
+    "title": "Bakkerij Voorbeeld",
+    "description": "Vers brood en taart, elke dag gebakken in Boechout.",
+    "eyebrow": "Sinds 1987",
+    "heading": "Vers gebakken in Boechout",
+    "intro": "Elke ochtend bakken we brood, taart en koffiekoeken met de hand.",
+    "hoursHeading": "Wanneer zijn we open?",
+    "contactHeading": "Stuur ons een bericht"
+  },
+  "privacy": { "description": "Hoe Bakkerij Voorbeeld omgaat met persoonsgegevens." },
+  "notFound": { "title": "Pagina niet gevonden", "description": "Deze pagina bestaat niet.", "body": "Deze pagina bestaat niet (meer).", "back": "Terug naar de startpagina" },
+  "footer": { "privacy": "Privacyverklaring" }
+}

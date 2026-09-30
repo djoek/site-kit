@@ -1,0 +1,12 @@
+---
+import Page from '../layouts/Page.astro';
+import { copyFor, site } from '@djoek/site-kit/runtime';
+const copy = copyFor(site.defaultLanguage).notFound;
+---
+<Page title={copy.title} description={copy.description}>
+  <section aria-labelledby="nf">
+    <h1 id="nf">{copy.title}</h1>
+    <p>{copy.body}</p>
+    <p><a href="/">{copy.back}</a></p>
+  </section>
+</Page>
