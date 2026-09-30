@@ -2,6 +2,11 @@
 
 Newest first. Sites pin a version with `github:djoek/site-kit#vX.Y.Z`; read every entry between your pinned version and the new one before bumping.
 
+## 0.1.4 (2026-09-30)
+
+- `<OpeningHours compact>` groups consecutive days with the same hours into one row ("woensdag t.e.m. zaterdag"); `hideClosed` leaves out closed days. New i18n key `hours.through` ("t.e.m." / "to"). Both props are off by default, so existing sites render the same.
+- Fix: `site-kit favicon` failed with "Input image exceeds pixel limit" for SVGs with a large viewBox (for example 1024×1024). The render density is now relative to the SVG's own size.
+
 ## 0.1.3 (2026-09-30)
 
 - Fix: images returned 404 in `astro dev` (`trailingSlash: 'always'` also applied to Astro's `/_image` endpoint). Dev now uses `'ignore'`; built URLs are unchanged. New test `test:dev` checks pages and images on the dev server.

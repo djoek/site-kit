@@ -6,9 +6,9 @@ import sharp from 'sharp';
 import { favicon } from '../src/favicon.js';
 
 const results = [];
-const expect = (name, ok) => {
+const expect = (name, ok, detail = '') => {
   results.push(ok);
-  console.log(`${ok ? '✓' : '✗'} ${name}`);
+  console.log(`${ok ? '✓' : '✗'} ${name}${ok ? '' : ` ${detail}`}`);
 };
 const site = { name: 'Test' };
 const quiet = () => {};
@@ -44,6 +44,17 @@ writeFileSync(path.join(root, 'public/favicon.svg'), '<svg xmlns="http://www.w3.
 await favicon({ root, site, log: quiet });
 const red = await sharp(path.join(root, 'public/icon-192.png')).raw().toBuffer();
 expect('svg: hand-made favicon.svg is the source, OKLCH red renders red', red[0] === 255 && red[1] === 0 && red[2] === 0);
+
+// Large viewBox (1024): must not exceed sharp's pixel limit.
+writeFileSync(path.join(root, 'public/favicon.svg'), '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><rect width="1024" height="1024" rx="240" fill="oklch(45.2% 0.3132 264.05)"/></svg>');
+let large = true;
+try {
+  await favicon({ root, site, log: quiet });
+} catch (error) {
+  large = error.message;
+}
+const blue = large === true ? await sharp(path.join(root, 'public/icon-512.png')).raw().toBuffer() : null;
+expect('svg: 1024×1024 viewBox renders (no pixel-limit error), blue centre', large === true && blue[(256 * 512 + 256) * 4 + 2] === 255, String(large));
 
 rmSync(root, { recursive: true, force: true });
 process.exit(results.every(Boolean) ? 0 : 1);

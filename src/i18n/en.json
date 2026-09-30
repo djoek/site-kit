@@ -21,7 +21,8 @@
     "date": "Date",
     "times": "Hours",
     "note": "Note",
-    "until": "until"
+    "until": "until",
+    "through": "to"
   },
   "address": {
     "phone": "Phone",

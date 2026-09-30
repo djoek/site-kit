@@ -86,8 +86,12 @@ export async function favicon({ root, site, source: explicit, log = console.log 
   let png;
   if (isSvg) {
     const svg = Buffer.from(readFileSync(source, 'utf8').replace(/oklch\([^)]*\)/gi, (colour) => oklchToRgb(colour)));
+    // Render at about twice the target size, relative to the SVG's own size (72 dpi = its nominal pixels).
+    // A fixed density per target size overflows sharp's pixel limit for large viewBoxes (e.g. 1024).
+    const { width: nominal = 32 } = await sharp(svg).metadata();
     png = (size, background = CLEAR) => {
-      const pipeline = sharp(svg, { density: Math.max(72, (72 * size) / 32) }).resize(size, size, { fit: 'contain', background });
+      const density = Math.min(2400, Math.max(1, (72 * 2 * size) / nominal));
+      const pipeline = sharp(svg, { density }).resize(size, size, { fit: 'contain', background });
       return (background.alpha === 1 ? pipeline.flatten({ background }) : pipeline).png().toBuffer();
     };
   } else {

@@ -21,7 +21,8 @@
     "date": "Datum",
     "times": "Uren",
     "note": "Opmerking",
-    "until": "tot en met"
+    "until": "tot en met",
+    "through": "t.e.m."
   },
   "address": {
     "phone": "Telefoon",
