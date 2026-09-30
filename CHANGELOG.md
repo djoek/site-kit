@@ -2,6 +2,10 @@
 
 Newest first. Sites pin a version with `github:djoek/site-kit#vX.Y.Z`; read every entry between your pinned version and the new one before bumping.
 
+## 0.1.3 (2026-09-30)
+
+- Fix: images returned 404 in `astro dev` (`trailingSlash: 'always'` also applied to Astro's `/_image` endpoint). Dev now uses `'ignore'`; built URLs are unchanged. New test `test:dev` checks pages and images on the dev server.
+
 ## 0.1.2 (2026-09-30)
 
 - `site-kit favicon` accepts a raster logo: `src/assets/logo.png` (automatic when there is no hand-made `public/favicon.svg`) or `--source <file>`. Transparent edges are trimmed, the logo is centred in a square, the apple-touch-icon gets a white background, and `public/favicon.svg` is generated as a wrapper around the PNG (marked, so it is never taken as the source).

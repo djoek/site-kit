@@ -1,6 +1,6 @@
 {
   "name": "@djoek/site-kit",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Shared Astro baseline for small static sites: semantic document shell, theming, SEO, opening hours, checks and deploy.",
   "license": "UNLICENSED",
   "type": "module",
@@ -32,11 +32,12 @@
     "sharp": "^0.35.4"
   },
   "scripts": {
-    "test": "bun run test:fixture && bun run test:negative && bun run test:favicon && bun run test:deploy",
+    "test": "bun run test:fixture && bun run test:negative && bun run test:favicon && bun run test:dev && bun run test:deploy",
     "test:fixture": "bun link && cd fixtures/basic && bun install && bun run check",
     "test:negative": "bun test/negative.js",
     "test:deploy": "bun test/deploy.js",
-    "test:favicon": "bun test/favicon.js"
+    "test:favicon": "bun test/favicon.js",
+    "test:dev": "bun test/dev.js"
   },
   "devDependencies": {
     "astro": "7.3.5",

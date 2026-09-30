@@ -89,14 +89,16 @@ export function siteKit(site) {
   return {
     name: '@djoek/site-kit',
     hooks: {
-      'astro:config:setup': ({ config, updateConfig, addWatchFile }) => {
+      'astro:config:setup': ({ config, command, updateConfig, addWatchFile }) => {
         root = fileURLToPath(config.root);
         loadSiteData(root, site); // fail early, before Astro starts rendering
         for (const file of watched()) addWatchFile(file);
         updateConfig({
           site: site.url,
           output: 'static',
-          trailingSlash: 'always',
+          // 'always' makes every built URL end in '/'. In dev it would also apply to Astro's own image endpoint
+          // (/_image), so every image returned 404 in `astro dev`; the build is unaffected either way.
+          trailingSlash: command === 'dev' ? 'ignore' : 'always',
           build: { format: 'directory', inlineStylesheets: 'never' },
           i18n: {
             defaultLocale: site.defaultLanguage,
