@@ -57,6 +57,35 @@ Styles:
 );
 ```
 
+## Analytics (Umami)
+
+All sites count visits with Kris's own Umami server. There is no Umami Cloud and no other analytics.
+
+| Setting | Value |
+|---|---|
+| Script URL | `https://scripts.loxodonta.be/script.js` (the same for every site) |
+| Website ID | one per site, created in the Umami dashboard; ask Kris, never guess |
+
+`site.config.ts`:
+
+```ts
+analytics: {
+  umami: {
+    scriptUrl: 'https://scripts.loxodonta.be/script.js',
+    websiteId: '<website id from the Umami dashboard>',
+  },
+},
+```
+
+With that block, site-kit does the rest; do not add the script or CSP entries by hand:
+
+- `<Document>` adds the script once per page (`defer`, `data-website-id`).
+- The generated CSP allows the script's origin in `script-src` and `connect-src`. Without it the browser blocks both the script and its tracking requests.
+- `<PrivacyPolicy>` adds the visitor-statistics section (`kit.analyticsHeading`, `kit.analytics`). Update `privacy.lastUpdated` when you add or remove analytics.
+- `site-kit check` fails when the script is missing, appears more than once, has a different website ID, or is present without `analytics` in the config.
+
+Without an `analytics` block a site has no analytics at all.
+
 ## Opening hours
 
 `src/data/hours.toml`, set `hours: 'src/data/hours.toml'` in `site.config.ts`:
