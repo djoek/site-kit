@@ -26,7 +26,7 @@ Shared Astro baseline for small static sites: the parts every site has, so each 
 ## Use in a site
 
 ```sh
-bun add github:djoek/site-kit#v0.1.6 astro sass
+bun add github:djoek/site-kit#v0.1.7 astro sass
 ```
 
 `astro.config.ts`:

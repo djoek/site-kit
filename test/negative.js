@@ -41,6 +41,18 @@ function runCase(name, args, mutate, expected) {
   return ok;
 }
 
+/** The opposite: a change that must NOT make check fail (guards against false positives). */
+function runPass(name, args, mutate) {
+  const work = copyFixture();
+  mutate(work);
+  const result = spawnSync('bun', [bin, 'check', ...args], { cwd: work, encoding: 'utf8', env: { ...process.env, ASTRO_TELEMETRY_DISABLED: '1' } });
+  const ok = result.status === 0;
+  console.log(`${ok ? '✓' : '✗'} ${name}`);
+  if (!ok) console.error(`${result.stdout}\n${result.stderr}`.split('\n').filter((line) => /^\s*[-✗]/.test(line)).map((line) => `    | ${line}`).join('\n'));
+  rmSync(work, { recursive: true, force: true });
+  return ok;
+}
+
 const results = [
   runCase('source: literal text, hex colour, missing translation key', ['--no-browser'], (work) => {
     edit(work, 'src/pages/_Home.astro', '<p>{copy.intro}</p>', '<p>{copy.intro}</p><p>Hard-coded tekst</p>');
@@ -50,6 +62,14 @@ const results = [
     delete copy.footer;
     writeFileSync(file, JSON.stringify(copy));
   }, ['belongs in src/content/i18n', 'hex colour', 'keys differ from nl.json (missing: footer.privacy', 'fix the source problems above first']),
+
+  runCase('source: named colour (and not a custom property named like one)', ['--no-browser'], (work) => {
+    appendFileSync(path.join(work, 'src/styles/site.scss'), '\nmain { border-color: black; }\n');
+  }, ['src/styles/site.scss: named colour']),
+
+  runPass('source: a custom property named like a colour is not a named colour', ['--no-browser'], (work) => {
+    appendFileSync(path.join(work, 'src/styles/site.scss'), '\nmain { --black: oklch(20% 0 0); outline-color: var(--black); }\n');
+  }),
 
   runCase('output: second h1, broken link', ['--no-browser'], (work) => {
     edit(work, 'src/pages/_Privacy.astro', '<PrivacyPolicy />', '<PrivacyPolicy /><h1>{copy.kit.privacy.title}</h1>');

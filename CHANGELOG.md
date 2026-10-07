@@ -2,6 +2,10 @@
 
 Newest first. Sites pin a version with `github:djoek/site-kit#vX.Y.Z`; read every entry between your pinned version and the new one before bumping.
 
+## 0.1.7 (2026-10-01)
+
+- Fix: the named-colour check flagged custom properties whose name contains a colour word, such as `color: var(--black)`. A colour keyword now only counts as a whole word. New negative test for `border-color: black` and a pass test for `var(--black)`.
+
 ## 0.1.6 (2026-10-01)
 
 - `site-kit maint start <issue> | finish | deploy`: the maintainer's fixed path from a GitHub issue to a deploy. Sites add them as `maint:start`, `maint:finish`, `maint:deploy` scripts (see README, "Maintenance").

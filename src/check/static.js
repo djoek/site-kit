@@ -25,7 +25,8 @@ const COLOUR_PROPERTY = '(?:color|background(?:-color)?|border(?:-[a-z]+)*|outli
 const NON_OKLCH = [
   [/#[0-9a-fA-F]{3,8}\b(?=[^{]*;)/, 'hex colour'],
   [/\b(?:rgba?|hsla?|hwb|lab|lch|color)\(/, 'non-OKLCH colour function'],
-  [new RegExp(`${COLOUR_PROPERTY}\\s*:[^;{]*\\b(?:${NAMED_COLOURS})\\b`, 'i'), 'named colour'],
+  // A colour keyword as a whole word: not part of a custom property name such as var(--black).
+  [new RegExp(`${COLOUR_PROPERTY}\\s*:[^;{]*(?<![\\w-])(?:${NAMED_COLOURS})(?![\\w-])`, 'i'), 'named colour'],
 ];
 const SVG_NON_OKLCH = /(?:fill|stroke|stop-color|color)=["'](?:#|rgb|hsl|(?:white|black|red|green|blue|gray|grey)\b)/i;
 
